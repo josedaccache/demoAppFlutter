@@ -18,7 +18,7 @@ abstract class APIClient {
   @GET(Utils.SUCCESS_URL)
   Future<ApiResponse> getSuccess();
 
-  @GET(Utils.SUCCESS_URL)
+  @GET(Utils.FAILURE_URL)
   Future<ApiResponse> getFailure();
 
   @GET(Utils.NEWS_URL)

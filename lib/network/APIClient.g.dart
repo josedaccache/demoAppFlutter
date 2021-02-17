@@ -9,7 +9,7 @@ part of 'APIClient.dart';
 class _APIClient implements APIClient {
   _APIClient(this._dio, {this.baseUrl}) {
     ArgumentError.checkNotNull(_dio, '_dio');
-    baseUrl ??= 'https://polished-sound-3002.getsandbox.com:443';
+    baseUrl ??= 'https://polished-sound-3002.getsandbox.com:443/';
   }
 
   final Dio _dio;
@@ -21,7 +21,7 @@ class _APIClient implements APIClient {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final _result = await _dio.request<Map<String, dynamic>>('/loadImages',
+    final _result = await _dio.request<Map<String, dynamic>>('loadImages',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'GET',
@@ -38,7 +38,7 @@ class _APIClient implements APIClient {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final _result = await _dio.request<Map<String, dynamic>>('/successContact',
+    final _result = await _dio.request<Map<String, dynamic>>('successContact',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'GET',
@@ -55,7 +55,7 @@ class _APIClient implements APIClient {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final _result = await _dio.request<Map<String, dynamic>>('/successContact',
+    final _result = await _dio.request<Map<String, dynamic>>('failureContact',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'GET',
@@ -72,7 +72,7 @@ class _APIClient implements APIClient {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final _result = await _dio.request<Map<String, dynamic>>('/allNews',
+    final _result = await _dio.request<Map<String, dynamic>>('allNews',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'GET',

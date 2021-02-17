@@ -21,7 +21,7 @@ class _SlideShowState extends State<SlideShow> {
   @override
   void initState() {
     super.initState();
-   _loadJsonData();
+    _loadJsonData();
   }
 
   Future<void> _loadJsonData() async {
