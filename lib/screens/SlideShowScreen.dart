@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import '../classes/ImageItem.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_app/bloc/slideshow/slide_show_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../apiresponses/ImageResponse.dart';
-import '../network/APIClient.dart';
-import 'package:dio/dio.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import '../classes/ImageItem.dart';
 
 class SlideShow extends StatefulWidget {
   @override
@@ -15,33 +15,59 @@ class SlideShow extends StatefulWidget {
 
 class _SlideShowState extends State<SlideShow> {
   int _current = 0;
-  ImageResponse imageResponse;
-  final client = APIClient(Dio(BaseOptions(contentType: "application/json")));
 
   @override
   void initState() {
     super.initState();
-    _loadJsonData();
-  }
-
-  Future<void> _loadJsonData() async {
-    ImageResponse response = await client.getImages();
-     setState(() {
-       imageResponse = response;
-     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return _buildCarousel(context);
+    return BlocProvider(
+      create: (context) => SlideShowBloc(),
+      child: _buildPage(),
+    );
   }
 
-  Widget _buildCarousel(BuildContext context) {
-    return imageResponse == null ?
-    Center(
+  Widget _buildPage() {
+    return BlocBuilder<SlideShowBloc, SlideShowState>(
+      builder: (context, state) {
+        if (state is SlideShowInitial) {
+          BlocProvider.of<SlideShowBloc>(context)
+            ..add(StartLoading())
+            ..add(ImageLoad());
+        }
+        if (state is Loading) {
+          return loadingView();
+        }
+        return populate();
+      },
+    );
+  }
+
+  Widget loadingView() {
+    return Center(
       child: CircularProgressIndicator(),
-    ) :
-      Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+    );
+  }
+
+  Widget populate() {
+    return BlocBuilder<SlideShowBloc, SlideShowState>(
+      buildWhen: (previous, current) => current is Success,
+      builder: (context, state) {
+        if (state is Success) {
+          ImageResponse data = state.response;
+          if (data.imageData.length > 0) {
+            return _buildCarousel(context, data);
+          }
+        }
+        return Container();
+      },
+    );
+  }
+
+  Widget _buildCarousel(BuildContext context, ImageResponse imageResponse) {
+    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       CarouselSlider(
         items: imageSliders(imageResponse.imageData),
         options: CarouselOptions(
@@ -95,18 +121,5 @@ class _SlideShowState extends State<SlideShow> {
               ),
             ))
         .toList();
-  }
-
-
-  void _showToast(String message){
-    Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.grey[600],
-        textColor: Colors.white,
-        fontSize: 16.0
-    );
   }
 }
