@@ -39,7 +39,6 @@ class Empty extends ContactUsFormState {}
 
 class Loading extends ContactUsFormState {}
 
-
 class Success extends ContactUsFormState {
   final String success;
   Success({@required this.success}) : assert(success != null);

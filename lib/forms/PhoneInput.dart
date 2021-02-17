@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/bloc/contact_us_form_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/contactus/contact_us_form_bloc.dart';
 
 class PhoneInput extends StatelessWidget {
-  const PhoneInput({Key key, this.focusNode, this.unfocusedColor, this.controller})
+  const PhoneInput(
+      {Key key, this.focusNode, this.unfocusedColor, this.controller})
       : super(key: key);
 
   final FocusNode focusNode;
@@ -16,7 +17,6 @@ class PhoneInput extends StatelessWidget {
       builder: (context, state) {
         return TextFormField(
           controller: controller,
-          // initialValue: state.phone.value,
           decoration: InputDecoration(
             border: new OutlineInputBorder(
               borderRadius: const BorderRadius.all(

@@ -1,31 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/apiresponses/NewsResponse.dart';
+import 'package:flutter_app/bloc/news/news_bloc.dart';
 import 'package:flutter_app/classes/NewsItem.dart';
 import 'package:flutter_app/screens/NewsDetailsScreen.dart';
-import '../network/APIClient.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../utils/Utils.dart';
-import 'package:dio/dio.dart';
 
 class News extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-    return _buildBody(context);
+    return BlocProvider(
+      create: (context) => NewsBloc(),
+      child: _buildPage(),
+    );
   }
 
-  FutureBuilder<NewsResponse> _buildBody(BuildContext context) {
-    final client = APIClient(Dio(BaseOptions(contentType: "application/json")));
-    return FutureBuilder<NewsResponse>(
-      future: client.getNews(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          final NewsResponse post = snapshot.data;
-          return _buildList(post.itemData);
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+  _buildPage() {
+    return BlocBuilder<NewsBloc, NewsState>(
+      builder: (context, state) {
+        if (state is NewsInitial) {
+          BlocProvider.of<NewsBloc>(context)
+            ..add(StartLoading())
+            ..add(NewsLoad());
         }
+        if (state is Loading) {
+          return loadingView();
+        }
+
+        return populate();
+      },
+    );
+  }
+
+  Widget loadingView() {
+    return Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  Widget populate() {
+    return BlocBuilder<NewsBloc, NewsState>(
+      buildWhen: (previous, current) => current is Success,
+      builder: (context, state) {
+        if (state is Success) {
+          NewsResponse data = state.response;
+          if (data.itemData.length > 0) {
+            return _buildList(data.itemData);
+          }
+        }
+        return Container();
       },
     );
   }
@@ -55,22 +78,22 @@ class News extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: Container(
-                    height: 100,
-                    width: 300,
-                    decoration:  BoxDecoration(
-                      color: Colors.transparent,
-                      image:DecorationImage(
-                        image: NetworkImage(item.urlToImage),
-                        fit: BoxFit.cover),
+                    padding: EdgeInsets.all(5.0),
+                    child: Container(
+                      height: 100,
+                      width: 300,
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        image: DecorationImage(
+                            image: NetworkImage(item.urlToImage),
+                            fit: BoxFit.cover),
+                      ),
+                    )
+                    // Image.network(
+                    //   item.urlToImage,
+                    //   fit: BoxFit.cover,
+                    // ),
                     ),
-                  )
-                  // Image.network(
-                  //   item.urlToImage,
-                  //   fit: BoxFit.cover,
-                  // ),
-                ),
               ),
               Expanded(
                   child: Padding(

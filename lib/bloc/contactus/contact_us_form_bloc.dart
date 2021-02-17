@@ -3,18 +3,15 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
-import '../models/models.dart';
+import '../../models/models.dart';
 import 'package:formz/formz.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_app/apiresponses/ApiResponse.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:dio/dio.dart';
 
-import '../network/APIClient.dart';
-import '../utils/Utils.dart';
+import '../../network/APIClient.dart';
 
-part 'contact_us_form_event.dart';
 part 'contact_us_form_state.dart';
+part 'contact_us_form_event.dart';
 
 class ContactUsFormBloc extends Bloc<ContactUsFormEvent, ContactUsFormState> {
   ContactUsFormBloc() : super(const ContactUsFormState());
