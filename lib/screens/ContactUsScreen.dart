@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import '../bloc/contactus/contact_us_form_bloc.dart';
-import 'package:flutter_app/forms/EmailInput.dart';
-import 'package:flutter_app/forms/MessageInput.dart';
-import 'package:flutter_app/forms/NameInput.dart';
-import 'package:flutter_app/forms/PhoneInput.dart';
-import 'package:flutter_app/forms/SubmitButtons.dart';
+import 'package:flutter_app/components/EmailInput.dart';
+import 'package:flutter_app/components/MessageInput.dart';
+import 'package:flutter_app/components/NameInput.dart';
+import 'package:flutter_app/components/PhoneInput.dart';
+import 'package:flutter_app/components/SubmitButtons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../bloc/contactus/contact_us_form_bloc.dart';
 
 class ContactUs extends StatelessWidget {
   @override

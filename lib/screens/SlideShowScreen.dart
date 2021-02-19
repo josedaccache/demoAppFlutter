@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/bloc/slideshow/slide_show_bloc.dart';
+import 'package:flutter_app/components/CustomImageView.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../apiresponses/ImageResponse.dart';
@@ -110,11 +111,8 @@ class _SlideShowState extends State<SlideShow> {
                     borderRadius: BorderRadius.all(Radius.circular(8.0)),
                     child: Stack(
                       children: <Widget>[
-                        Image.network(
-                          item.source,
-                          fit: BoxFit.fitWidth,
-                          width: 1000.0,
-                          height: 1000.0,
+                        CustomImageView(
+                          imageUrl: item.source,
                         ),
                       ],
                     )),
